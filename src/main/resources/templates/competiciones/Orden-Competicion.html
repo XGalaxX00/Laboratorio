@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lista de Competicion</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Kdam+Thmor+Pro&display=swap');
+     
+    * {
+        font-family: "Kdam Thmor Pro", sans-serif;
+    }
+
+    .nav-link {
+        color: #4C1F7A
+    }
+
+    body {
+        background-color: #4C1F7A;
+    }
+
+    .card {
+        border-radius: 12px;
+    }
+
+    .form-control,
+    .form-select {
+        background-color: #d5dae7;
+    }
+
+    #btn-registrar {
+        background-color: #FF8000;
+    }
+
+    .nav {
+        --bs-nav-link-hover-color: #FF8000;
+    }
+    #inscribirse {
+        background-color: #FF8000;
+    }
+    #abandonar {
+        background-color: hsl(272.43deg 35.24% 20.59%);
+    }
+
+    .btn{
+        background-color: #FF8000;
+    }
+    .btn:hover{
+        background-color: #e06e09;
+    }
+    </style>
+<body>
+    <header th:fragment="header" class="bg-light shadow-lg p-3">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <!-- Navegación principal -->
+                <div class="col-lg-8 d-flex justify-content-start flex-wrap">
+                    <nav class="nav">
+                        <a th:href="@{/scn/lista}" class="nav-link fw-bold fs-5">SCN</a>
+                        <a th:href="@{/eventos/registro}" class="nav-link fw-bold fs-5">Eventos</a>
+                        <a th:href="@{/turnos/lista}" class="nav-link fw-bold fs-5">Turnos</a>
+                        <a th:href="@{/clubes/registro}" class="nav-link fw-bold fs-5">Clubes</a>
+                        <a th:href="@{/competiciones/lista}" class="nav-link fw-bold fs-5">Competiciones</a>
+
+                    </nav>
+                </div>
+                <!-- Selector de resultados y botón de cerrar sesión -->
+                <div class="col-lg-4 d-flex justify-content-end align-items-center">
+                    <select id="seleccionar_link" class="form-select form-select-sm me-3" style="width: 226px;">
+                        <option value="" selected disabled>Resultados</option>
+                        <option value="registrar_resultados.html">Registrar Resultados</option>
+                        <option th:href="@{/competiciones/lista}">Mostrar Resultados</option>
+                    </select>
+                    
+                    <a class="btn fw-bold fs-5 px-6" style="width: 526px; color: white;" onclick="document.getElementById('logoutForm').submit();">Cerrar Sesión</a>
+                </div>
+            </div>
+        </div>
+        <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
+    </header>
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-7">
+            <!-- Contenedor para el título y el selector -->
+            <div class="d-flex justify-content-between align-items-center mb-4 mt-5">
+                <!-- Título alineado a la izquierda -->
+                <p class="text-light fw-bold fs-3 m-0">Lista de Competiciones</p>
+                <!-- Selector alineado a la derecha -->
+                <select id="seleccionar_link" class="form-select form-select-sm" style="width: 185px;"
+                    onchange="window.location.href='/usuarios/perfil/orden-merito?categoriaId=' + this.value">
+                    <option class="text-dark" value="" selected disabled>Sedes</option>
+                    <option class="text-dark">Los Olivos</option>
+                    <option class="text-dark">San Miguel</option>
+                    <option class="text-dark">Miraflores</option>
+                    <option class="text-dark">Jesus Maria</option>
+                </select>
+            </div>
+            <!-- Tabla -->
+            <div class="card">
+                <div class="card-body p-4">
+                    <div class="table-responsive">
+                        <table class="table text-dark fs-5">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Evento</th>
+                                    <th>Sede</th>
+                                    <th>Categoría</th>
+                                    <th>Usuarios</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Robotines</td>
+                                    <td>Jesus Maria</td>
+                                    <td>En Aprendizaje</td>
+                                    <td>
+                                        <ul>
+                                            <li>Fernanda</li>
+                                        </ul>
+                                        <p>Total de inscritos: <span>1</span>/4</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
+    
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-wFqP0d8UVKxy6+vH3eMAi2tdBO+S2yKJ2R9rIYPC9ABhE4I0fXK5qnNki4u9gHtv"
+        crossorigin="anonymous"></script>
+</body>
+</html>
