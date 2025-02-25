@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Kdam+Thmor+Pro&display=swap');
+
+* {
+    font-family: "Kdam Thmor Pro", sans-serif;
+    color: white;
+}
+
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;;
+    align-items: center;
+}
+
+.card img {
+    height: 100%;
+    /* Ocupa todo el alto de la tarjeta */
+    width: 100%;
+    /* Asegura que la imagen cubra todo el espacio disponible */
+    object-fit: cover;
+    /* Ajusta la imagen para que se vea bien */
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+
+}
+
+.btn-warning {
+    width: 100%;
+}
+
+.link-light {
+    display: block;
+    margin-top: 10px;
+    text-align: center;
+}
+
+@media screen and (max-width: 995px) {
+
+    .card {
+        flex-direction: column;
+    }
+}

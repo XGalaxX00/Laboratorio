@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Registro de Resultados</title>
+    <link rel="stylesheet" th:href="@{/css/registro_evento.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+</head>
+<style>
+    html,
+    body {
+        height: 100%;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        background-color: #362246;
+    }
+
+    #boton_club {
+        padding: 4px;
+        border-radius: 5px;
+        border: 1px solid #FF8000;
+        color: #FF8000;
+    }
+
+    main {
+        flex: 1;
+    }
+
+    footer {
+        background-color: rgb(65 44 80);
+    }
+
+    #option1 {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #option2 {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+    .icono {
+            color: white;
+            -webkit-text-stroke: 3px rgb(65 44 80);
+        }
+		
+	a:hover{
+		color: darkgray;
+	}
+</style>
+
+<body>
+	<header class="shadow p-1 mb-4" style="background-color: rgb(65 44 80);">
+	        <div class="container">
+	            <div class="row align-items-center">
+	                <div class="col-12 col-md-8">
+	                    <nav class="navbar navbar-expand-md navbar-light">
+	                        <a th:href="@{/inicio/perfil}">
+	                            <button class="btn bi bi-arrow-left-circle-fill icono" style="font-size: 2rem;"></button>
+	                        </a>
+	                    </nav>
+	                </div>
+	    
+	                <!-- Botones y menú offcanvas en la misma columna -->
+	                <div class="col-12 col-md-4 d-flex justify-content-end align-items-center">
+	                    <a class="btn fw-bold fs-6 px-6 mx-2"  th:href="@{/inicio/perfil/orden-merito}"  style="background-color: #FF8000;">Por Categoría</a>
+	                </div>
+	            </div>
+	        </div>
+	    </header>
+	
+    <!-- Cuerpo Principal -->
+    <div class="container py-5">
+        <div class="row flex-row-reverse align-items-center">
+            <!-- Texto -->
+            <div>
+                <h1 class="display-4 fw-bold text-center text-md-start">Solicitud de Club:</h1>
+                <p class="lead text-center text-md-start fs-4">Ingrese los datos necesarios para enviar una solicitud
+                    para la
+                    creación de un club de robótica. Recuerde que debe haber iniciado sesión como competidor para
+                    acceder a esta función.</p>
+            </div>
+        </div>
+
+        <div class="row flex-row-reverse align-items-center">
+            <!-- Imagen -->
+            <div class="col-md-6 text-center mb-4 mb-md-0">
+                <img th:src="@{/imagen/robot_solicitud.PNG}" class="" style="max-width: 100%; height: auto;">
+            </div>
+            <!-- Texto -->
+            <div class="col-md-6 text-center rounded-4 mb-4 mb-md-0 bg-light m-0 p-0 shadow-lg">
+                <div class=" rounded-top-4  d-flex justify-content-center" style="background-color: #FF8000">
+                    <img class="my-2" th:src="@{/imagen/imagen_solicitud.PNG}" alt="" style="max-width: 15%; height: auto;">
+                </div>
+                <br>
+				<form th:action="@{/solicitudes/guardar}" method="post" th:object="${soli}" enctype="multipart/form-data">
+                <div class="">
+						<div>
+					    	<input type="hidden" class="form-control" id="encargado_id" name="encargado_id"
+					               th:value="${encargado}" readonly>
+					    </div>
+					    <div class="input-group-text mb-4 align-items-center mx-5">
+					        <label for="nombre_usuario" class="form-label text-dark m-2 fs-5 fw-bold">Nombre del encargado:</label>
+					        <input type="text" class="form-control" id="nombre_usuario" name="nombre_usuario"
+					               th:value="${nombreUsu}" readonly>
+					    </div>
+                    <div class="input-group-text mb-4 align-items-center mx-5">
+                        <label for="" class="form-label text-dark m-2 fs-5 fw-bold">Nombre del club:</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" th:field="*{nombre_club}" pattern="(?=.*[A-Za-z]).+" required>
+                    </div>
+                    <div class="input-group-text mb-4 align-items-center mx-5">
+                        <textarea class="form-control" rows="5" placeholder="Escriba aquí su motivo:"id="motivo" name="motivo" th:field="*{motivo}" required oninput="validateMotivo(this)"></textarea>
+                    </div>
+					<div class="input-group-text mb-4 align-items-center mx-5">
+						<label for="" class="form-label text-dark m-2 fs-5 fw-bold">Foto del Club:</label>
+            			<input type="file" style="color: black;" id="imagen" accept="image/*" name="file" class="form-control-file" required>
+					</div>
+                    <div class="text-center mb-4">
+                        <button type="submit" class="btn text-dark fs-5 fw-bold"
+                            style="width: 30%; background-color: #FF8000">Enviar Solicitud</button>
+                    </div>
+                </div>
+				</form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-light text-center py-3">
+        <div class="container d-flex justify-content-between">
+            <div id="option1">
+                <a href="#" class="text-light m-1">Política de Privacidad</a>
+                <a href="#" class="text-light m-1">Términos de Uso</a>
+                <a href="#" class="text-light m-1">Contacto</a>
+            </div>
+            <div>
+                <h3>卐 ROBOTECH 卐</h3>
+                <p>2021 &copy; Todos los derechos reservados</p>
+            </div>
+            <div id="option2">
+                <a href="#" class="text-light m-1">Categorias</a>
+                <a href="#" class="text-light m-1">Sedes</a>
+                <a href="#" class="text-light m-1">Niveles</a>
+            </div>
+        </div>
+    </footer>
+	<script>
+	    setTimeout(() => {
+	        const alert = document.querySelector('.alert-success');
+	        if (alert) {
+	            alert.style.display = 'none';
+	        }
+	    }, 5000); // Oculta después de 5 segundos
+	</script>
+	
+	<script>
+		  function validateMotivo(textarea) {
+		    // Expresión regular que verifica si existe al menos una letra (mayúscula o minúscula)
+		    const regex = /[A-Za-z]/;
+		    if (!regex.test(textarea.value)) {
+		      textarea.setCustomValidity("El motivo debe contener al menos una letra.");
+		    } else {
+		      textarea.setCustomValidity("");
+		    }
+		  }
+		</script>
+	
+	<script th:inline="javascript">
+	    /* ✅ Mensaje de éxito */
+	    var successMessage = /*[[${success}]]*/ false;
+	    if (successMessage) {
+	        Swal.fire({
+	            icon: 'success',
+	            title: '¡Éxito!',
+	            text: "La solicitud se ha registrado correctamente.",
+	            confirmButtonColor: '#3085d6',
+	            confirmButtonText: 'Aceptar'
+	        });
+	    }
+	
+	    /* ❌ Mensaje de error */
+	    var errorMessage = /*[[${error}]]*/ null;
+		    if (errorMessage) {
+		        Swal.fire({
+		            icon: 'error',
+		            title: 'Error',
+		            text: errorMessage,
+		            confirmButtonColor: '#d33',
+		            confirmButtonText: 'Intentar de nuevo'
+		        });
+		    }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var fileInput = document.getElementById("imagen");
+        var form = document.querySelector("form");
+
+        form.addEventListener("submit", function (event) {
+            if (!fileInput.files.length) {
+                event.preventDefault(); // Evita el envío del formulario
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debes adjuntar una imagen antes de enviar la solicitud.',
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'Intentar de nuevo'
+                });
+            }
+        });
+
+        // Validación en tiempo real al cambiar el input de archivo
+        fileInput.addEventListener("change", function () {
+            var errorMessage = document.getElementById("fileError");
+
+            if (!fileInput.files.length) {
+                if (!errorMessage) {
+                    errorMessage = document.createElement("p");
+                    errorMessage.id = "fileError";
+                    errorMessage.style.color = "red";
+                    errorMessage.style.fontSize = "14px";
+                    errorMessage.textContent = "⚠ Debes seleccionar una imagen.";
+                    fileInput.parentNode.appendChild(errorMessage);
+                }
+            } else {
+                if (errorMessage) {
+                    errorMessage.remove(); // Elimina el mensaje si el usuario adjunta una imagen
+                }
+            }
+        });
+    });
+</script>
+
+	
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+
+
+</html>

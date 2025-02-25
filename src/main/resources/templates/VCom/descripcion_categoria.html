@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ROBOTECH</title>
+    <link rel="stylesheet" th:href="@{/css/registro_evento.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<style>
+    html,
+    body {
+        height: 100%;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        background-color: #362246;
+    }
+
+    main {
+        flex: 1;
+    }
+
+    #boton_club {
+        padding: 4px;
+        border-radius: 5px;
+        border: 1px solid #FF8000;
+        color: #FF8000;
+    }
+
+    footer {
+        background-color: rgb(65 44 80);
+    }
+
+    #option1 {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #option2 {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+</style>
+
+<body>
+    <!-- Header -->
+    <div th:replace="~{Fragment/vistas.html :: header}"></div>
+
+
+    <!-- Cuerpo Principal -->
+    <div class="container my-5">
+        <!--MANIPULADORES-->
+        <div class="row flex-row-reverse align-items-center mb-5">
+            <div class="row flex-row-reverse align-items-center">
+                <!-- Texto -->
+                <div>
+                    <h1 class="display-4 fw-bold text-center text-md-start">Categoria de robots:</h1>
+                    <p class="lead text-center text-md-start fs-4">En nuestras competencias, los robots se clasifican
+                        según sus habilidades y funciones. Desdemanipuladores precisos hasta sistemas avanzados con
+                        inteligencia artificial, cada categoría aporta un estilo único a las batallas, mostrando
+                        innovación y estrategia en cada enfrentamiento.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Manipuladores -->
+            <div class="col-md-6 p-3 rounded-3 shadow-lg" style="background-color: #FF8000">
+                <h1 class=" fw-bold text-center text-md-start">Manipuladores</h1>
+                <p class="lead text-center text-md-start fs-3">Son brazos robóticos diseñados para realizar tareas
+                    repetitivas y precisas. Combinados con plataformas móviles, pueden operar en diversos entornos.</p>
+            </div>
+            <div class="col-md-6 text-center mb-4 mb-md-0">
+                <img th:src="@{/imagen/garra.PNG}" alt="Robots Manipuladores" class="" style="max-width: 80%; height: auto;">
+            </div>
+        </div>
+
+        <!-- En Aprendizaje -->
+        <div class="row flex-row align-items-center mb-5">
+            <div class="col-md-6 p-3 rounded-3 shadow-lg" style="background-color: #FF8000">
+                <h1 class=" fw-bold text-center text-md-start">En Aprendizaje</h1>
+                <p class="lead text-center text-md-start fs-3">Estos robots usan aprendizaje automático para mejorar su
+                    rendimiento y adaptarse a nuevas situaciones, convirtiéndolos en máquinas inteligentes.</p>
+            </div>
+            <div class="col-md-6 text-center mb-4 mb-md-0">
+                <img th:src="@{/imagen/araña.PNG}" alt="Robots en Aprendizaje" class="" style="max-width: 80%; height: auto;">
+            </div>
+        </div>
+
+        <!-- Reprogramables -->
+        <div class="row flex-row-reverse align-items-center mb-5">
+            <div class="col-md-6 p-3 rounded-3 shadow-lg" style="background-color: #FF8000">
+                <h1 class=" fw-bold text-center text-md-start">Reprogramables</h1>
+                <p class="lead text-center text-md-start fs-3">Son robots que pueden ser reconfigurados para realizar
+                    diferentes tareas según las necesidades, adaptándose a distintos entornos y funciones.</p>
+            </div>
+            <div class="col-md-6 text-center mb-4 mb-md-0">
+                <img th:src="@{/imagen/perrito.PNG}" alt="Robots Reprogramables" class="" style="max-width: 80%; height: auto;">
+            </div>
+        </div>
+
+        <!-- Móviles -->
+        <div class="row flex-row align-items-center mb-5">
+            <div class="col-md-6 p-3 rounded-3 shadow-lg" style="background-color: #FF8000">
+                <h1 class=" fw-bold text-center text-md-start">Móviles</h1>
+                <p class="lead text-center text-md-start fs-3">Son robots que se desplazan autónomamente, utilizando
+                    sensores para monitorear su posición y moverse de forma precisa hacia su destino.</p>
+            </div>
+            <div class="col-md-6 text-center mb-4 mb-md-0">
+                <img th:src="@{/imagen/carrito.PNG}" alt="Robots Móviles" class="" style="max-width: 80%; height: auto;">
+            </div>
+        </div>
+
+        <!-- Con IA -->
+        <div class="row flex-row-reverse align-items-center mb-5">
+            <div class="col-md-6 p-3 rounded-3 shadow-lg" style="background-color: #FF8000">
+                <h1 class=" fw-bold text-center text-md-start">Inteligencia Artificial (IA)</h1>
+                <p class="lead text-center text-md-start fs-3">Estos robots utilizan algoritmos de IA para aprender,
+                    razonar y tomar decisiones autónomamente, adaptándose a su entorno y tareas complejas.</p>
+            </div>
+            <div class="col-md-6 text-center mb-4 mb-md-0">
+                <img th:src="@{/imagen/ia.PNG}" alt="Robots con IA" class="" style="max-width: 80%; height: auto;">
+            </div>
+        </div>
+
+    </div>
+    <footer class="text-light text-center py-3">
+        <div class="container d-flex justify-content-between">
+            <div id="option1">
+                <a href="#" class="text-light m-1">Política de Privacidad</a>
+                <a href="#" class="text-light m-1">Términos de Uso</a>
+                <a href="#" class="text-light m-1">Contacto</a>
+            </div>
+            <div>
+                <h3> ROBOTECH </h3>
+                <p>2021 &copy; Todos los derechos reservados</p>
+            </div>
+			<div id="option2">
+                <a th:href="@{/inicio/categorias}" class="text-light m-1">Categorias</a>
+                <a th:href="@{/inicio/sedes}" class="text-light m-1">Sedes</a>
+                <a th:href="@{/inicio/niveles}" class="text-light m-1">Niveles</a>
+            </div>
+        </div>
+    </footer>
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+
+
+</html>

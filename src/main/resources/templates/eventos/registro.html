@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Registro de Eventos</title>
+    <link rel="stylesheet" th:href="@{/css/registro_evento.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<style>
+    .nav-link {
+        color: #4C1F7A
+    }
+
+    body {
+        background-color: #362246;
+    }
+
+    .card {
+        border-radius: 12px;
+    }
+
+    .form-control,
+    .form-select {
+        background-color: #d5dae7;
+    }
+
+    #btn-registrar {
+        background-color: #FF8000;
+    }
+
+    .nav {
+        --bs-nav-link-hover-color: #e06e09;
+    }
+    #inscribirse {
+        background-color: #FF8000;
+    }
+    #abandonar {
+        background-color: hsl(272.43deg 35.24% 20.59%);
+    }
+</style>
+<body>
+<div th:replace="~{Fragment/general.html :: header}"></div>
+
+<div class="container my-5 justify-content-center">
+    <div class="row" style="justify-content: space-between;">
+        <div class="col-md-6">
+            <h1 class="text-light mb-5">Registro de Eventos</h1>
+            <form th:action="@{/eventos/guardar}" method="post" th:object="${even}">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <div class="card p-4" style="width: 33rem;">
+                    <div class="input-group-text mb-4 align-items-center">
+                        <label for="nombre" class="form-label text-dark m-2 fs-5 fw-bold">Nombre:</label>
+                        <input type="text" id="nombre" class="form-control" name="nombre" th:field="*{nombre}" pattern="(?=.*[A-Za-z]).+" required>
+                    </div>
+                    <div class="input-group-text mb-4 align-items-center">
+                        <label for="fecha" class="form-label text-dark m-2 fs-5 fw-bold">Fecha:</label>
+                        <input type="date" id="fecha" class="form-control" name="fecha" th:field="*{fecha}" required>
+                    </div>
+                    <div class="input-group-text mb-4 align-items-center">
+                        <label for="hora" class="form-label text-dark m-2 fs-5 fw-bold">Hora:</label>
+                        <input type="time" id="hora" class="form-control" name="hora" th:field="*{hora}" required>
+                    </div>
+                    <div class="input-group-text mb-4 align-items-center">
+                        <label for="sedes" class="form-label text-dark m-2 fs-5 fw-bold">Sede:</label>
+                        <select class="form-select" id="sedes" name="sedes.id" required>
+                            <option disabled selected>Seleccionar Sede</option>
+                            <option th:each="sd : ${sed}" th:value="${sd.id}" th:text="${sd.nombre}"></option>
+                        </select>
+                    </div>
+                    <div class="input-group-text mb-4 align-items-center">
+                        <label for="categorias" class="form-label text-dark m-2 fs-5 fw-bold">Categoría:</label>
+                        <select class="form-select" id="categorias" name="categorias.id" required>
+                            <option disabled selected>Seleccionar Categoría</option>
+                            <option th:each="ct : ${cat}" th:value="${ct.id}" th:text="${ct.nombre}"></option>
+                        </select>
+                    </div>
+                    <div class="d-flex justify-content-evenly">
+						<button type="submit" id="btn-registrar" role="button" class="form-button btn text-light fs-5">Registrar</button>
+					</div>
+					<div th:if="${registroExitoso}" class="alert alert-success mt-3">
+					    Evento registrado exitosamente.
+					</div>
+					<div th:if="${error}" class="alert alert-danger">
+					    <span th:text="${error}"></span>
+					</div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-5">
+            <h1 class="text-light mb-5">Lista de Eventos</h1>
+            <div class="card p-4">
+                <table class="table">
+                    <thead>
+                    <tr style="text-align: center;">
+                        <th>Nombre</th>
+						<th>Edición</th>
+						<th>Eliminar</th>
+                    </tr>
+                    </thead>
+                    <tbody style="text-align: center;">
+                    <tr th:each="evento : ${eventos}">
+                        <td th:text="${evento.nombre}"></td>
+                        <td>
+                            <button type="button" class="btn btn-warning btn-sm editarEvento" data-bs-toggle="modal"
+                                    data-bs-target="#editarModal" th:data-eventos-id="${evento.id}">Editar</button>
+                        </td>
+						<td>
+							<a th:href="@{/eventos/eliminar/{id}(id=${evento.id})}" class="btn btn-danger btn-sm"
+							   onclick="return confirm('¿Estás seguro de que deseas eliminar este evento?');">Eliminar</a>
+						</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div th:if="${#lists.isEmpty(eventos)}" class="alert alert-info">No hay eventos disponibles en este
+                    momento.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Evento -->
+<div class="modal fade" id="editarModal" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="editarModalLabel">Editar Evento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-dark text-start">
+                <form th:action="@{/eventos/update}" method="post">
+                    <input type="hidden" name="id">
+                    <div class="mb-1">
+                        <label for="editNombre" class="form-label">Nombre:</label>
+                        <input type="text" id="editNombre" class="form-control" name="nombre" pattern="(?=.*[A-Za-z]).+">
+                    </div>
+                    <div class="mb-2">
+                        <label for="editFecha" class="form-label">Fecha:</label>
+                        <input type="date" id="editFecha" class="form-control" name="fecha">
+                    </div>
+                    <div class="mb-2">
+                        <label for="editHora" class="form-label">Hora:</label>
+                        <input type="time" id="editHora" class="form-control" name="hora">
+                    </div>
+                    <div class="mb-2">
+                        <label for="editSedes" class="form-label">Sede:</label>
+                        <select class="form-select" id="editSedes" name="sedes.id">
+                            <option disabled selected>Seleccionar Sede</option>
+                            <option th:each="sd : ${sed}" th:value="${sd.id}" th:text="${sd.nombre}"></option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editCategorias" class="form-label">Categoría:</label>
+                        <select class="form-select" id="editCategorias" name="categorias.id">
+                            <option disabled selected>Seleccionar Categoría</option>
+                            <option th:each="ct : ${cat}" th:value="${ct.id}" th:text="${ct.nombre}"></option>
+                        </select>
+                    </div>
+                    <div class="modal-footer flex-column align-items-center">
+						<button id="inscribirse" type="submit" class="btn text-white">Guardar Cambios</button>
+					</div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+        
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(document).ready(function () {
+        $('.editarEvento').click(function () {
+            var eventoId = $(this).data('eventos-id');
+            $.ajax({
+                url: '/eventos/id/' + eventoId,
+                type: 'GET',
+                dataType: 'json',
+                success: function (evento) {
+                    $('#editarModal input[name="id"]').val(evento.id);
+                    $('#editarModal input[name="nombre"]').val(evento.nombre);
+                    $('#editarModal input[name="fecha"]').val(evento.fecha);
+                    $('#editarModal input[name="hora"]').val(evento.hora);
+                    $('#editarModal select[name="sedes.id"]').val(evento.sedes.id);
+                    $('#editarModal select[name="categorias.id"]').val(evento.categorias.id);
+                },
+                error: function () {
+                    alert('Error al cargar los datos del evento.');
+                }
+            });
+        });
+    });
+    /*]]>*/
+</script>
+</body>
+</html>

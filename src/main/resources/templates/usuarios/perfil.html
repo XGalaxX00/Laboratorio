@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Perfil</title>
+	<link rel="stylesheet" th:href="@{/css/perfil_competidor.css}">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+		crossorigin="anonymous"></script>
+</head>
+<style>
+	body {
+		background-color: #2E1B40;
+		color: white;
+	}
+
+	.sidebar {
+		background-color: #1E122C;
+		min-height: 100vh;
+		padding: 20px;
+	}
+
+	.profile-card {
+		background-color: #3D2645;
+		padding: 20px;
+		border-radius: 10px;
+	}
+
+	.level-box {
+		background-color: #FF8000;
+		padding: 10px;
+		text-align: center;
+		border-radius: 5px;
+		color: white;
+		font-weight: bold;
+	}
+
+	/* Agregarle el estilo alapartado de notificaciones*/
+	.notifications {
+		background-color: #FF8000;
+		padding: 15px;
+		border-radius: 10px;
+		overflow: auto;
+		max-height: 500px;
+	}
+
+	.notification-box {
+		background-color: white;
+		color: black;
+		padding: 10px;
+		border-radius: 5px;
+	}
+
+	.notification-box .btn {
+		background-color: #FFA500;
+		border: none;
+	}
+
+	#ver_mas {
+		background-color: #FF8000;
+	}
+
+	.menu-link {
+		color: white;
+		text-decoration: none;
+		display: block;
+		padding: 10px 0;
+	}
+
+	.menu-link:hover {
+		transition: 0.3s;
+		transform: scale(1.1);
+		color: #FFA500;
+	}
+
+	.table-responsive {
+		overflow: auto;
+		max-height: 500px;
+	}
+
+	/* Para ocultar las barras de desplazamiento de las notificaciones */
+	::-webkit-scrollbar {
+		width: 0px;
+		height: 0px;
+	}
+
+	::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background: transparent;
+		border-radius: 0;
+	}
+
+	* {
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+	}
+
+	/* estilo para modal 1 adandonar un club*/
+	#advertencia {
+		background-color: #FF8000;
+	}
+
+	#abandonar {
+		background-color: hsl(272.43deg 35.24% 20.59%);
+	}
+
+	#inscribirse {
+		background-color: #FF8000;
+	}
+
+	#dato {
+		color: hsl(272.43deg 35.24% 20.59%);
+	}
+
+
+	@media (max-width: 991px) {
+		.profile-card {
+			margin-bottom: 20px;
+		}
+
+		#nivel {
+			display: flex;
+			align-items: center;
+		}
+
+		#perfil {
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.table-responsive {
+			margin-top: 20px;
+		}
+	}
+
+	@media (max-width: 767px) {
+		#tabla {
+			margin-top: 20px;
+		}
+	}
+</style>
+
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<main class="col-md-9 col-lg-10 p-4">
+				<div class="row">
+					<div class="profile-card col-md-12">
+						<div
+							class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+							<img th:src="@{'/src/main/resources/static/Img-com/' + ${foto}}" alt="Imagen del competidor"
+								width="150" height="150" class="rounded d-block">
+							<ul id="nivel" class="nav col-12 col-lg-auto flex-column me-lg-auto mb-md-0 p-3">
+								<li>
+									<p class="fs-2" th:text="${usuar.nombre}"></p>
+								</li>
+								<li>
+									<p class="fs-4" th:text="${correo}"></p>
+								</li>
+								<li>
+									<p class="fs-4" style="color: #FF8000;">Categoria: <span
+											th:text="${categoria}"></span></p>
+								</li>
+								<li>
+									<div class="d-flex align-items-start">
+										<p class="fs-4 me-2" style="color: #FF8000;">Nombre de Club: <span
+												th:text="${club}"></span></p>
+										<div th:if="${clubes != null}">
+											<span th:text="${clubes.nombre}"></span>
+										</div>
+										<div th:if="${clubes == null}">
+											<p>No es parte de un club</p>
+										</div>
+									</div>
+								</li>
+							</ul>
+
+							<ul id="nivel" class="nav col-12 col-lg-auto flex-column mb-md-0 p-5 align-items-center">
+								<li>
+									<p class="fs-1">Nivel : <span th:text="${nivel}"></span></p>
+								</li>
+								<li>
+									<div>
+										<p class="fs-4" style="color: #FF8000;">Puntaje : <span
+												th:text="${puntaje}"></span></p>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<!-- Notifications and Table Section -->
+				<div class="row mt-4">
+					<div class="col-md-6">
+						<div class="notifications">
+							<h5 class="fs-3 fw-bold">Notificaciones</h5>
+							<div class="card mb-3">
+								<div th:if="${#lists.isEmpty(eventos)}">
+									<div style="color: black;">No hay notificaciones disponibles en este momento.</div>
+								</div>
+								<div class="card-body d-flex flex-wrap justify-content-end" th:each="eve : ${eventos}">
+									<h5 class="card-title lh-sm">¡Nuevo evento disponible! Sé parte de esta nueva
+										batalla: "<span style="color: black;" th:text="${eve.nombre}"></span>" Haz clic
+										en "Ver más" para obtener más información sobre
+										el evento.</h5>
+									<button type="button" id="inscribirse" class="verEvento btn text-dark"
+										th:data-evento-id="${eve.id}" data-bs-toggle="modal"
+										data-bs-target="#exampleModal">Ver más</button>
+									<form th:action="@{/inicio/inscribirse/{id}(id=${eve.id})}" method="post"
+										onsubmit="return validarInscripcion(this)">
+										<input type="hidden" name="eventoId" th:value="${eve.id}">
+										<button type="submit" class="verEvento btn btn-success text-light" style="margin-left: 5px;">Inscribirse</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="tabla" class="col-md-6">
+						<div class="card">
+							<div id="tabla" class="card-body ">
+								<h5 class="card-title fs-3 fw-bold">Órden de Mérito</h5>
+								<div class="table-responsive">
+									<table class="table">
+										<thead>
+											<tr>
+												<th scope="col">#</th>
+												<th scope="col">Nombre</th>
+												<th scope="col">Apellido</th>
+												<th scope="col">Puesto</th>
+												<th scope="col">Puntos</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="usu, iterStat : ${usuario}" th:if="${iterStat.index < 4}">
+												<th scope="row" th:text="${iterStat.index + 1}"></th>
+												<td th:text="${usu.nombre}"></td>
+												<td th:text="${usu.apellido}"></td>
+												<td>Primero</td>
+												<td th:text="${usu.puntaje.puntaje + ' pts'}"></td>
+											</tr>
+										</tbody>
+									</table>
+									<a th:href="@{/inicio/perfil/orden-merito}" id="ver_mas" class="btn text-light">Ver
+										más</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</main>
+			<nav class="col-md-3 col-lg-2 sidebar">
+				<ul class="nav flex-column">
+					<a th:href="@{/inicio/historial/{id}(id=${usuar.id})}" class="menu-link fs-4">Historial de
+						Competiciones</a>
+					<hr class="border-light">
+					<li><a th:href="@{/inicio/clubes}" class="menu-link fs-4">Ingresar a un Club</a></li>
+					<li><a th:href="@{/solicitudes/registro/}+${usuar.id}" id="registrar_club"
+							class="menu-link fs-4">Crear Club</a></li>
+					<hr class="border-light">
+					<li><a href="#" class="menu-link text-danger fs-2"
+							onclick="document.getElementById('logoutForm').submit();">Cerrar Sesión</a></li>
+					<li>
+						<form id="deleteForm" th:action="@{/inicio/perfil/eliminar/{id}(id=${usuar.id})}" method="post">
+						<button type="button" class="btn btn-danger" onclick="confirmarEliminacion()">Eliminar Cuenta</button>
+						</form>
+					</li>
+				</ul>
+			</nav>
+			<form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
+		</div>
+	</div>
+	<!--Modal-->
+	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header bg-dark text-white" id="abandonar">
+					<h5 class="modal-title fs-2" id="exampleModalLabel">Evento
+						<span class="nombre"></span>
+					</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body text-dark text-start">
+					<tbody class="text-center">
+						<tr class="d-flex">
+							<span class="fs-4 me-4 fecha" style="color: black;"></span>
+							<td class="fs-4 me-4"></td><br>
+							<span class="fs-4 me-4 hora" style="color: black;"></span>
+							<td class="fs-4 me-4"></td><br>
+							<span class="fs-4 me-4 sede" style="color: black;"></span>
+							<td class="fs-4 me-4"></td><br>
+							<span class="fs-4 me-4 categoria" style="color: black;"></span>
+							<td class="fs-4 me-4"></td><br>
+						</tr>
+					</tbody>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal de abandonar Club -->
+	<div class="modal" id="modal01" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div id="advertencia" class="modal-header">
+					<h5 class="modal-title text-danger fs-5 fw-bold">ADVERTENCIA!!!</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body text-dark">
+					¿En serio quiere abandonar el club al que pertenece?
+				</div>
+				<div class="modal-footer justify-content-between">
+					<button type="button" id="cancelar" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+					<button type="button" id="abandonar" class="btn text-light">Abandonar Club</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+		crossorigin="anonymous"></script>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			$('.verEvento').click(function () {
+				var eventoId = $(this).data('evento-id');
+				console.log("ID del evento para visualizar:", eventoId);
+
+				$.ajax({
+					url: '/inicio/evento/id/' + eventoId,
+					type: 'GET',
+					dataType: 'json',
+					success: function (evento) {
+						// Actualiza los elementos del modal con los datos del evento
+						$('#exampleModal .nombre').text(evento.nombre);
+						$('#exampleModal .fecha').text('Fecha: ' + evento.fecha);
+						$('#exampleModal .hora').text('Hora: ' + evento.hora);
+						$('#exampleModal .sede').text('Categoria: ' + evento.categorias.nombre);
+						$('#exampleModal .categoria').text('Sede: ' + evento.sedes.nombre);
+						$('#exampleModal .evento-id').val(evento.id);
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+						console.error('Error al recuperar el evento para visualizar:', textStatus, errorThrown);
+					}
+				});
+				$.ajax({
+					url: '/inicio/competicion/id/' + eventoId,
+					type: 'GET',
+					dataType: 'json',
+					success: function (evento) {
+						// Actualiza los elementos del modal con los datos del evento
+						$('#exampleModal .evento-id').val(evento.id);
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+						console.error('Error al recuperar el evento para visualizar:', textStatus, errorThrown);
+					}
+				});
+			});
+		});
+
+	</script>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			// ✅ Mensajes de éxito
+			const successMessage = "[[${success}]]".trim();
+			if (successMessage && successMessage !== "null" && successMessage !== "") {
+				Swal.fire({
+					icon: 'success',
+					title: '¡Éxito!',
+					text: successMessage,
+					confirmButtonColor: '#3085d6',
+					confirmButtonText: 'Aceptar'
+				}).then(() => {
+					window.location.href = "/inicio/perfil"; // Redirige después de aceptar
+				});
+			}
+
+			// ❌ Mensajes de error
+			const errorMessage = "[[${error}]]".trim();
+			if (errorMessage && errorMessage !== "null" && errorMessage !== "") {
+				Swal.fire({
+					icon: 'error',
+					title: 'Error',
+					text: errorMessage,
+					confirmButtonColor: '#d33',
+					confirmButtonText: 'Intentar de nuevo'
+				});
+			}
+		});
+	</script>
+
+	<script>
+		function validarInscripcion(form) {
+			let eventoId = form.eventoId.value;
+			console.log("Intentando inscribirse en el evento ID:", eventoId);
+			return true; // Devuelve true para enviar el formulario
+		}
+	</script>
+	<script>
+	    function confirmarEliminacion() {
+	        Swal.fire({
+	            title: '¿Estás seguro?',
+	            text: "Esta acción eliminará tu cuenta permanentemente. No podrás revertirlo.",
+	            icon: 'warning',
+	            showCancelButton: true,
+	            confirmButtonColor: '#d33',
+	            cancelButtonColor: '#3085d6',
+	            confirmButtonText: 'Sí, eliminar',
+	            cancelButtonText: 'Cancelar'
+	        }).then((result) => {
+	            if (result.isConfirmed) {
+	                document.getElementById("deleteForm").submit();
+	            }
+	        });
+	    }
+	</script>
+
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</body>
+
+</html>
